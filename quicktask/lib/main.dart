@@ -28,7 +28,6 @@ class TaskManagerApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(),
         '/home': (context) => HomeScreen(),
-        // Other routes...
       },
     );
   }
@@ -74,13 +73,13 @@ class AuthScreen extends StatelessWidget {
         title:Row(
           children: [
             Image.asset(
-              'Qt_PageIcon.png', // Replace with your image path
-              width: 50, // Adjust the width as needed
-              height: 50, // Adjust the height as needed
+              'Qt_PageIcon.png',
+              width: 50, 
+              height: 50,
             ),
             SizedBox(width: 8),
             Text('Quick Task',style: TextStyle(
-              color: Colors.amber, // Set the color here
+              color: Colors.amber, 
             ),textAlign: TextAlign.center),
 
           ],
@@ -129,7 +128,7 @@ class SignUpScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Quick Task',style: TextStyle(
-          color: Colors.amber, // Set the color here
+          color: Colors.amber,
         )),
       ),
       body: Center(
@@ -224,7 +223,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
           centerTitle: true,
           title: Text('Quick Task',style: TextStyle(
-            color: Colors.amber, // Set the color here
+            color: Colors.amber, 
           ),)),
       body: Center(
         child: Column(
@@ -298,7 +297,7 @@ class HomeScreen extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text('Quick Task',style: TextStyle(
-              color: Colors.amber, // Set the color here
+              color: Colors.amber,
             ),),
             actions: [
               IconButton(
@@ -416,11 +415,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ParseUser? currentUser = await ParseUser.currentUser();
       if (currentUser != null) {
         String formattedDueDate =
-        DateFormat('yyyy-MM-dd').format(_dueDate); // Format due date
+        DateFormat('yyyy-MM-dd').format(_dueDate);
         ParseObject task = ParseObject('Task')
           ..set('title', title)
           ..set('description', description)
-          ..set('dueDate', formattedDueDate) // Use formatted due date
+          ..set('dueDate', formattedDueDate) 
           ..set('flagDelete', 0)
           ..set('flagArchive', 0)
           ..set('user', currentUser);
@@ -433,9 +432,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ),
           );
           Navigator.of(context)
-              .pushReplacementNamed('/home'); // Navigate to home screen
+              .pushReplacementNamed('/home'); 
         } catch (e) {
-          print('Error saving task: $e'); // Print error for debugging
+          print('Error saving task: $e'); 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Failed to add task: $e'),
@@ -463,7 +462,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Task',style: TextStyle(
-          color: Colors.black54, // Set the color here
+          color: Colors.black54, 
         ),),
       ),
       body: Padding(
@@ -518,7 +517,7 @@ class _ViewTaskScreenState extends State<ViewTaskScreen> {
 
   void addRestoredTask(ParseObject restoredTask) {
     setState(() {
-      tasks.add(restoredTask); // Add the restored task to the list
+      tasks.add(restoredTask);
     });
   }
 
@@ -537,8 +536,8 @@ class _ViewTaskScreenState extends State<ViewTaskScreen> {
     if (currentUser != null) {
       QueryBuilder<ParseObject> queryBuilder =
       QueryBuilder<ParseObject>(ParseObject('Task'))
-        ..whereEqualTo('flagDelete', 0) // Filter out deleted tasks
-        ..whereEqualTo('flagArchive', 0) //To not show Archive Tasks
+        ..whereEqualTo('flagDelete', 0) 
+        ..whereEqualTo('flagArchive', 0) 
         ..whereEqualTo('user', currentUser)
         ..orderByDescending('createdAt');
 
@@ -612,29 +611,24 @@ class _ViewTaskScreenState extends State<ViewTaskScreen> {
   }
 
   Future<void> _editTask(BuildContext context, ParseObject task) async {
-    // Navigate to the edit task screen
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EditTaskScreen(task: task),
       ),
     ).then((_) {
-      // Refresh tasks after editing
       _fetchTasks();
     });
   }
 
   Future<void> _archiveTask(BuildContext context, ParseObject task) async {
-    task.set('flagArchive', 1); // Set flagArchive to 1 (Archived)
+    task.set('flagArchive', 1); 
     try {
       await task.save();
-
-      // Remove the task from the list immediately
       setState(() {
         tasks.remove(task);
       });
 
-      // Show snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Task archived successfully'),
@@ -652,14 +646,10 @@ class _ViewTaskScreenState extends State<ViewTaskScreen> {
   Future<void> _deleteTask(BuildContext context, ParseObject task) async {
     task.set('flagDelete', 1);
     try {
-      await task.save();
-
-      // Remove the task from the list immediately
+      await task.save();  
       setState(() {
         tasks.remove(task);
       });
-
-      // Show snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Task temporarily deleted successfully'),
@@ -679,7 +669,7 @@ class _ViewTaskScreenState extends State<ViewTaskScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('View Tasks',style: TextStyle(
-          color: Colors.black54, // Set the color here
+          color: Colors.black54,
         ),),
       ),
       body: isLoading
@@ -699,7 +689,6 @@ class _ViewTaskScreenState extends State<ViewTaskScreen> {
             title: Text(tasks[index].get('title') ?? ''),
             subtitle: Text(tasks[index].get('dueDate') ?? ''),
             onTap: () => _navigateToTaskDetails(tasks[index]),
-            // Navigate to task details
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -749,7 +738,7 @@ class TaskDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Task Details',style: TextStyle(
-          color: Colors.black54, // Set the color here
+          color: Colors.black54, 
         ),),
       ),
       body: Padding(
@@ -826,22 +815,22 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     if (title.isNotEmpty && description.isNotEmpty) {
       if (_dueDate != null) {
         String formattedDueDate =
-        DateFormat('yyyy-MM-dd').format(_dueDate); // Format due date
+        DateFormat('yyyy-MM-dd').format(_dueDate);
         print(
-            'Formatted Due Date: $formattedDueDate'); // Print formatted due date
+            'Formatted Due Date: $formattedDueDate'); 
         widget.task
           ..set('title', title)
           ..set('description', description)
-          ..set('dueDate', formattedDueDate); // Convert DateTime to String
+          ..set('dueDate', formattedDueDate);
 
         try {
-          await widget.task.save(); // Save changes to the task
+          await widget.task.save(); 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Task updated successfully'),
             ),
           );
-          Navigator.pop(context); // Go back to View Task Screen
+          Navigator.pop(context);
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -870,7 +859,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Task',style: TextStyle(
-          color: Colors.black54, // Set the color here
+          color: Colors.black54, 
         ),),
       ),
       body: Padding(
@@ -945,7 +934,7 @@ class _ArchivedTasksScreenState extends State<ArchivedTasksScreen> {
       QueryBuilder<ParseObject> queryBuilder =
       QueryBuilder<ParseObject>(ParseObject('Task'));
       queryBuilder.whereEqualTo('user', currentUser);
-      queryBuilder.whereEqualTo('flagArchive', 1); // Only fetch archived tasks
+      queryBuilder.whereEqualTo('flagArchive', 1); 
       queryBuilder.orderByDescending('createdAt');
 
       try {
@@ -978,7 +967,7 @@ class _ArchivedTasksScreenState extends State<ArchivedTasksScreen> {
 
   Future<void> _restoreTask(BuildContext context, ParseObject task) async {
     try {
-      task.set('flagArchive', 0); // Set flagArchive to 0 (Not Archived)
+      task.set('flagArchive', 0); 
       await task.save();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -986,7 +975,6 @@ class _ArchivedTasksScreenState extends State<ArchivedTasksScreen> {
         ),
       );
 
-      // Refresh the archived tasks list immediately after restoring the task
       _fetchArchivedTasks();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -1002,7 +990,7 @@ class _ArchivedTasksScreenState extends State<ArchivedTasksScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Archived Tasks',style: TextStyle(
-          color: Colors.black54, // Set the color here
+          color: Colors.black54, 
         ),),
       ),
       body: isLoading
@@ -1056,7 +1044,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
       QueryBuilder<ParseObject> queryBuilder =
       QueryBuilder<ParseObject>(ParseObject('Task'));
       queryBuilder.whereEqualTo('user', currentUser);
-      queryBuilder.whereEqualTo('flagDelete', 1); // Only fetch archived tasks
+      queryBuilder.whereEqualTo('flagDelete', 1); 
       queryBuilder.orderByDescending('createdAt');
 
       try {
@@ -1076,7 +1064,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
 
   Future<void> _moveToHistory(ParseObject task) async {
     try {
-      task.set('flagDelete', 0); // Reset flagDelete to 0
+      task.set('flagDelete', 0);  
       await task.save();
       _fetchDeletedTasks();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -1121,7 +1109,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Recycle Bin',style: TextStyle(
-          color: Colors.black54, // Set the color here
+          color: Colors.black54, 
         ),),
       ),
       body: ListView.builder(
