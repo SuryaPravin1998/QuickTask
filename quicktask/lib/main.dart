@@ -13,10 +13,10 @@ void main() async {
     debug: true,
   );
 
-  runApp(TaskManagerApp());
+  runApp(QuickTask());
 }
 
-class TaskManagerApp extends StatelessWidget {
+class QuickTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
